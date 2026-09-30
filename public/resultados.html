@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apuração dos Votos - Grêmio</title>
+  <script src="https://jsdelivr.net"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+  <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md text-gray-800">
+    <h1 class="text-2xl font-bold text-center text-blue-600 mb-2">Apuração em Tempo Real</h1>
+    <p class="text-sm text-gray-500 text-center mb-6">Contagem oficial das urnas eletrônicas</p>
+    
+    <div id="listaResultados" class="space-y-4">
+      <p class="text-center text-gray-500">Carregando votos...</p>
+    </div>
+
+    <button onclick="carregarResultados()" class="mt-6 w-full bg-gray-800 text-white p-3 rounded-lg font-bold hover:bg-gray-900 transition duration-200 cursor-pointer">
+      🔄 ATUALIZAR APURAÇÃO
+    </button>
+  </div>
+
+  <script>
+    async function carregarResultados() {
+      const container = document.getElementById('listaResultados');
+      
+      try {
+        const resposta = await fetch('/api/resultados');
+        const dados = await resposta.json();
+        
+        if (dados.length === 0) {
+          container.innerHTML = `<p class="text-center text-gray-500">Nenhum voto computado ainda.</p>`;
+          return;
+        }
+
+        container.innerHTML = ""; // Limpa a tela
+        
+        // Calcula o total geral de votos para fazer a porcentagem
+        const totalGeral = dados.reduce((acc, item) => acc + item.total, 0);
+
+        dados.forEach(item => {
+          const porcentagem = ((item.total / totalGeral) * 100).toFixed(1);
+          
+          container.innerHTML += `
+            <div class="border-b border-gray-200 pb-3">
+              <div class="flex justify-between font-semibold text-gray-700 mb-1">
+                <span>${item._id}</span>
+                <span>${item.total} votos (${porcentagem}%)</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-4">
+                <div class="bg-blue-600 h-4 rounded-full" style="width: ${porcentagem}%"></div>
+              </div>
+            </div>
+          `;
+        });
+      } catch (err) {
+        container.innerHTML = `<p class="text-center text-red-500">Erro ao carregar dados do servidor.</p>`;
+      }
+    }
+
+    // Carrega automaticamente assim que abre a página
+    carregarResultados();
+  </script>
+</body>
+</html>

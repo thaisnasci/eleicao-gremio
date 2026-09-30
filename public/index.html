@@ -1,0 +1,78 @@
+{*/MONGO_URI=mongodb+srv://tah28silva:gremio2026@cluster0.gypgz.mongodb.net/eleicao?retryWrites=true&w=majority
+PORT=3000/*}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eleição Grêmio Estudantil</title>
+  <script src="https://jsdelivr.net"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+  <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+    <h1 class="text-2xl font-bold text-center text-blue-600 mb-6">Urna Eletrônica Escolar</h1>
+    
+    <form id="formVoto" class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700">Digite sua Matrícula:</label>
+        <input type="text" id="matricula" required class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Selecione sua Chapa:</label>
+        <div class="space-y-2">
+          <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 border-gray-200">
+            <input type="radio" name="chapa" value="Chapa 1 - Atitude" required class="mr-3">
+            <span>Chapa 1 - Atitude</span>
+          </label>
+          <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 border-gray-200">
+            <input type="radio" name="chapa" value="Chapa 2 - Renovação" class="mr-3">
+            <span>Chapa 2 - Renovação</span>
+          </label>
+          <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 border-gray-200">
+            <input type="radio" name="chapa" value="Branco/Nulo" class="mr-3">
+            <span class="text-gray-500">Voto em Branco / Nulo</span>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700 transition duration-200">CONFIRMAR VOTO</button>
+    </form>
+    
+    <p id="mensagem" class="mt-4 text-center font-semibold hidden"></p>
+  </div>
+
+  <script>
+    document.getElementById('formVoto').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const matricula = document.getElementById('matricula').value;
+      const chapa = document.querySelector('input[name="chapa"]:checked').value;
+      const msgElement = document.getElementById('mensagem');
+
+      try {
+        const resposta = await fetch('/api/votar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ matricula, chapa })
+        });
+
+        const dados = await resposta.json();
+        msgElement.classList.remove('hidden', 'text-red-500', 'text-green-500');
+
+        if (resposta.ok) {
+          msgElement.innerText = "🎉 Voto confirmado com sucesso!";
+          msgElement.classList.add('text-green-500');
+          document.getElementById('formVoto').reset();
+        } else {
+          msgElement.innerText = dados.erro;
+          msgElement.classList.add('text-red-500');
+        }
+      } catch (err) {
+        msgElement.innerText = "Erro ao conectar ao servidor.";
+        msgElement.classList.add('text-red-500');
+      }
+    });
+  </script>
+</body>
+</html>
