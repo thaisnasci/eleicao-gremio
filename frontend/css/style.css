@@ -1,0 +1,228 @@
+:root {
+  font-family: Arial, sans-serif;
+  color: #171717;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #d7d7d7;
+  display: grid;
+  place-items: center;
+}
+
+.pagina {
+  width: min(940px, 94vw);
+}
+
+.cartao,
+.urna {
+  box-shadow: 0 8px 24px #0004;
+}
+
+.entrada {
+  max-width: 460px;
+  margin: auto;
+  padding: 38px;
+  background: #f7f7f7;
+  text-align: center;
+  border-radius: 8px;
+}
+
+h1 {
+  margin: 0 0 8px;
+}
+
+.entrada p {
+  color: #555;
+}
+
+form {
+  margin-top: 28px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+input {
+  width: 100%;
+  font-size: 1.3rem;
+  padding: 12px;
+  border: 2px solid #777;
+}
+
+.botao {
+  border: 0;
+  border-radius: 3px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 3px #555;
+}
+
+.continuar {
+  width: 100%;
+  padding: 15px;
+  margin-top: 18px;
+  background: #26863b;
+  color: #fff;
+}
+
+.mensagem {
+  min-height: 1.2em;
+  color: #a31616 !important;
+  font-weight: bold;
+}
+
+.escondido {
+  display: none !important;
+}
+
+.urna {
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  background: #c5c5c5;
+  padding: 30px;
+  gap: 28px;
+  border-radius: 4px;
+}
+
+.monitor {
+  min-height: 430px;
+  background: #202a2c;
+  color: #f5f5f5;
+  padding: 30px;
+  border: 10px solid #111;
+  display: flex;
+  align-items: center;
+}
+
+.monitor h2 {
+  margin-top: 4px;
+}
+
+.instrucao {
+  margin: 0;
+  font-size: .9rem;
+}
+
+.numero {
+  font-size: 3rem;
+  font-family: monospace;
+  margin: 8px 0 28px;
+  letter-spacing: 8px;
+}
+
+#dadosChapa {
+  border-top: 1px solid #ddd;
+  padding-top: 16px;
+  min-height: 94px;
+}
+
+#dadosChapa p {
+  margin: 6px 0;
+}
+
+.painel {
+  background: #555;
+  padding: 20px;
+  align-content: center;
+}
+
+.teclado {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 270px;
+  margin: auto;
+}
+
+.tecla {
+  color: #fff;
+  background: #121212;
+  height: 58px;
+  font-size: 1.4rem;
+}
+
+.tecla:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+.tecla.zero {
+  grid-column: 2;
+}
+
+.acoes {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.acoes .botao {
+  padding: 14px 10px;
+  font-size: .7rem;
+}
+
+.branco {
+  background: #f7f7f7;
+}
+
+.corrige {
+  background: #e56427;
+}
+
+.confirma {
+  background: #279347;
+  color: #fff;
+  min-height: 58px;
+}
+
+.confirmacao h2 {
+  color: #f3d75f;
+}
+
+.confirmacao .botao {
+  margin: 10px 8px 0 0;
+  padding: 12px 16px;
+}
+
+.sucesso {
+  text-align: center;
+  width: 100%;
+}
+
+.sucesso h2 {
+  color: #70de85;
+  font-size: 2rem;
+}
+
+@media (max-width: 680px) {
+  .urna {
+    grid-template-columns: 1fr;
+    padding: 14px;
+    gap: 14px;
+  }
+
+  .monitor {
+    min-height: 290px;
+    padding: 20px;
+  }
+
+  .painel {
+    padding: 15px;
+  }
+
+  .acoes {
+    margin-top: 18px;
+  }
+}

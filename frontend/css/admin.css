@@ -1,0 +1,42 @@
+.admin-painel{
+    max-width:560px
+}
+.cards-admin{
+    display:grid;
+    gap:14px;
+    margin:26px 0
+}
+.card-admin{
+    display:flex;
+    flex-direction:column;
+    gap:5px;padding:20px;
+    background:#28383b;
+    color:#fff;
+    text-decoration:none;
+    text-align:left;
+    border-left:7px solid #279347;
+    border-radius:4px;
+    box-shadow:0 2px #152022
+}
+.card-admin:hover{
+    background:#35494d
+}
+.card-admin span{
+    font-size:.9rem;
+    color:#d7e0e1
+}
+.sair{
+    padding:13px 28px
+}
+.subtitulo{
+    margin-top:32px;
+    font-size:1.2rem
+}
+.item-chapa{
+    text-align:left;
+    border-top:1px solid #ccc;
+    padding:12px 0
+}
+.item-chapa small{
+    color:#555
+}

@@ -1,7 +1,7 @@
 {
   "name": "eleicao-gremio",
   "version": "1.0.0",
-  "description": "",
+  "description": "\"# eleicao-gremio.\"",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,5 +17,13 @@
     "express": "^5.2.1",
     "mongodb": "^7.7.0",
     "mongoose": "^9.10.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thaisnasci/eleicao-gremio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thaisnasci/eleicao-gremio/issues"
+  },
+  "homepage": "https://github.com/thaisnasci/eleicao-gremio#readme"
 }

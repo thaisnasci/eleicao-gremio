@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urna Eletrônica Escolar</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <main class="pagina">
+      <section id="telaMatricula" class="cartao entrada">
+        <h1>Urna Eletrônica Escolar</h1>
+        <p>Eleição do Grêmio Estudantil</p>
+        <form id="formMatricula">
+          <label for="matricula">Informe sua matrícula</label
+          ><input
+            id="matricula"
+            inputmode="numeric"
+            autocomplete="off"
+            required
+          /><button type="submit" class="botao continuar">CONTINUAR</button>
+        </form>
+        <p id="mensagemMatricula" class="mensagem" aria-live="polite"></p>
+      </section>
+      <section id="urna" class="urna escondido" aria-live="polite">
+        <div class="monitor"><div id="conteudoTela"></div></div>
+        <div class="painel">
+          <div class="teclado" id="teclado"></div>
+          <div class="acoes">
+            <button id="branco" class="botao branco">BRANCO</button
+            ><button id="corrige" class="botao corrige">CORRIGE</button
+            ><button id="confirma" class="botao confirma">CONFIRMA</button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
