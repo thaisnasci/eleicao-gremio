@@ -6,28 +6,36 @@
     <title>Cadastro de Eleitores</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
+
   <body>
     <main class="cartao entrada">
       <h1>Painel do Administrador</h1>
+
       <p>Cadastre as matrículas autorizadas a votar.</p>
+
       <form id="formCadastro">
-        <label for="senha">Senha do administrador</label
-        ><input type="password" id="senha" required /><label
-          for="listaMatriculas"
-          style="margin-top: 18px"
-          >Matrículas</label
-        ><textarea
+        <label for="listaMatriculas">Matrículas</label>
+
+        <textarea
           id="listaMatriculas"
           rows="6"
           required
           placeholder="202601, 202602, 202603"
           style="width: 100%; padding: 12px; font: inherit"
-        ></textarea
-        ><button type="submit" class="botao continuar">CADASTRAR ALUNOS</button>
+        ></textarea>
+
+        <button type="submit" class="botao continuar">
+          CADASTRAR ALUNOS
+        </button>
       </form>
+
       <p id="mensagem" class="mensagem" aria-live="polite"></p>
-      <p><a href="admin.html">Voltar ao painel</a></p>
+
+      <p>
+        <a href="admin.html">Voltar ao painel</a>
+      </p>
     </main>
+
     <script src="js/config.js"></script>
     <script src="js/cadastrar.js"></script>
   </body>

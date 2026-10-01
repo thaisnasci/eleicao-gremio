@@ -6,14 +6,37 @@
     <title>Resultados - Grêmio</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
+
   <body>
     <main class="cartao entrada">
       <h1>Apuração dos Votos</h1>
+
       <p>Contagem oficial da urna eletrônica</p>
-      <div id="listaResultados"><p>Carregando votos...</p></div>
-      <button id="atualizar" class="botao continuar">ATUALIZAR APURAÇÃO</button>
-      <p><a href="admin.html">Voltar ao painel</a></p>
+
+      <div id="listaResultados">
+        <p>Carregando votos...</p>
+      </div>
+
+      <button id="atualizar" class="botao continuar" type="button">
+        ATUALIZAR APURAÇÃO
+      </button>
+
+      <button
+        id="limparBanco"
+        class="botao"
+        type="button"
+        style="margin-top: 12px"
+      >
+        🗑️ LIMPAR BANCO DE DADOS
+      </button>
+
+      <p id="mensagemLimpeza" class="mensagem" aria-live="polite"></p>
+
+      <p>
+        <a href="admin.html">Voltar ao painel</a>
+      </p>
     </main>
+
     <script src="js/config.js"></script>
     <script src="js/resultados.js"></script>
   </body>

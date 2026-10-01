@@ -7,36 +7,49 @@
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/admin.css" />
   </head>
+
   <body>
     <main class="cartao entrada">
       <h1>Chapas</h1>
+
       <p>Cadastre e consulte as chapas participantes.</p>
+
       <form id="formChapa">
-        <label for="senha">Senha do administrador</label
-        ><input id="senha" type="password" required /><label
-          for="numero"
-          style="margin-top: 18px"
-          >Número da chapa</label
-        ><input id="numero" inputmode="numeric" required /><label
-          for="nome"
-          style="margin-top: 18px"
-          >Nome da chapa</label
-        ><input id="nome" required /><label
-          for="descricao"
-          style="margin-top: 18px"
-          >Descrição</label
-        ><textarea
+        <label for="numero">Número da chapa</label>
+        <input id="numero" inputmode="numeric" required />
+
+        <label for="nome" style="margin-top: 18px">
+          Nome da chapa
+        </label>
+        <input id="nome" required />
+
+        <label for="descricao" style="margin-top: 18px">
+          Descrição
+        </label>
+        <textarea
           id="descricao"
           rows="3"
           style="width: 100%; padding: 12px; font: inherit"
-        ></textarea
-        ><button class="botao continuar" type="submit">CADASTRAR CHAPA</button>
+        ></textarea>
+
+        <button class="botao continuar" type="submit">
+          CADASTRAR CHAPA
+        </button>
       </form>
+
       <p id="mensagem" class="mensagem" aria-live="polite"></p>
+
       <h2 class="subtitulo">Chapas cadastradas</h2>
-      <div id="listaChapas"><p>Carregando...</p></div>
-      <p><a href="admin.html">Voltar ao painel</a></p>
+
+      <div id="listaChapas">
+        <p>Carregando...</p>
+      </div>
+
+      <p>
+        <a href="admin.html">Voltar ao painel</a>
+      </p>
     </main>
+
     <script src="js/config.js"></script>
     <script src="js/chapas.js"></script>
   </body>

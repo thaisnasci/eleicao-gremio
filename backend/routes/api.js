@@ -161,5 +161,60 @@ router.post('/cadastrar-chapa', async (req, res) => {
   try { return res.status(201).json({ sucesso: true, chapa: await Chapa.create({ numero, nome, descricao }) }); }
   catch (error) { return res.status(400).json({ erro: error.code === 11000 ? 'Já existe uma chapa com este número.' : 'Erro ao cadastrar a chapa.' }); }
 });
+router.post('/admin/limpar-tudo', async (req, res) => {
+  if (!adminAutorizado(req, res)) return;
 
+  const senhaReset = String(req.body.senhaReset || '');
+
+  if (!process.env.RESET_PASSWORD || senhaReset !== process.env.RESET_PASSWORD) {
+    return res.status(401).json({
+      erro: 'Senha de limpeza inválida.'
+    });
+  }
+
+  try {
+    await Promise.all([
+      Aluno.deleteMany({}),
+      Chapa.deleteMany({}),
+      Voto.deleteMany({})
+    ]);
+
+    return res.json({
+      sucesso: true,
+      mensagem: 'Banco de dados limpo com sucesso.'
+    });
+  } catch {
+    return res.status(500).json({
+      erro: 'Não foi possível limpar o banco de dados.'
+    });
+  }
+});
+router.post('/admin/limpar-tudo', async (req, res) => {
+  if (!adminAutorizado(req, res)) return;
+
+  const senhaReset = String(req.body.senhaReset || '');
+
+  if (!process.env.RESET_PASSWORD || senhaReset !== process.env.RESET_PASSWORD) {
+    return res.status(401).json({
+      erro: 'Senha de limpeza inválida.'
+    });
+  }
+
+  try {
+    await Promise.all([
+      Aluno.deleteMany({}),
+      Chapa.deleteMany({}),
+      Voto.deleteMany({})
+    ]);
+
+    return res.json({
+      sucesso: true,
+      mensagem: 'Banco de dados limpo com sucesso.'
+    });
+  } catch {
+    return res.status(500).json({
+      erro: 'Não foi possível limpar o banco de dados.'
+    });
+  }
+});
 module.exports = router;
