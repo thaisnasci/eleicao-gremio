@@ -3,18 +3,46 @@ const Aluno = require('../models/Aluno');
 const Chapa = require('../models/Chapa');
 const Voto = require('../models/Voto');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 
 function adminAutorizado(req, res) {
-  if (!process.env.ADMIN_PASSWORD || req.body.senha !== process.env.ADMIN_PASSWORD) {
-    res.status(401).json({ erro: 'Senha de administrador inválida.' });
+  const autorizacao = req.headers.authorization;
+
+  if (!autorizacao || !autorizacao.startsWith('Bearer ')) {
+    res.status(401).json({ erro: 'Administrador não autenticado.' });
     return false;
   }
-  return true;
+
+  const token = autorizacao.substring(7);
+
+  try {
+    jwt.verify(token, process.env.JWT_SECRET);
+    return true;
+  } catch {
+    res.status(401).json({ erro: 'Sessão do administrador inválida ou expirada.' });
+    return false;
+  }
 }
 
-router.post('/admin/validar', (req, res) => {
-  if (!adminAutorizado(req, res)) return;
-  return res.json({ sucesso: true });
+router.post('/admin/login', (req, res) => {
+  const senha = String(req.body.senha || '');
+
+  if (!process.env.ADMIN_PASSWORD || senha !== process.env.ADMIN_PASSWORD) {
+    return res.status(401).json({
+      erro: 'Senha de administrador inválida.'
+    });
+  }
+
+  const token = jwt.sign(
+    { tipo: 'administrador' },
+    process.env.JWT_SECRET,
+    { expiresIn: '2h' }
+  );
+
+  return res.json({
+    sucesso: true,
+    token
+  });
 });
 
 router.post('/alunos/validar', async (req, res) => {
@@ -49,19 +77,70 @@ router.post('/votos', async (req, res) => {
   } catch { return res.status(500).json({ erro: 'Não foi possível registrar o voto.' }); }
 });
 
-router.get('/resultados', async (req, res) => {
+router.post('/resultados', async (req, res) => {
+  if (!adminAutorizado(req, res)) return;
+
   try {
     const votos = await Voto.aggregate([
-      { $group: { _id: { chapa: '$chapa', tipo: '$tipo' }, total: { $sum: 1 } } },
-      { $lookup: { from: 'chapas', localField: '_id.chapa', foreignField: '_id', as: 'chapa' } },
-      { $unwind: { path: '$chapa', preserveNullAndEmptyArrays: true } },
-      { $project: { _id: 0, numero: { $cond: [{ $eq: ['$_id.tipo', 'branco'] }, 'BRANCO', '$chapa.numero'] }, nome: { $cond: [{ $eq: ['$_id.tipo', 'branco'] }, 'Votos em branco', '$chapa.nome'] }, total: 1 } },
-      { $sort: { numero: 1 } }
+      {
+        $group: {
+          _id: {
+            chapa: '$chapa',
+            tipo: '$tipo'
+          },
+          total: {
+            $sum: 1
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: 'chapas',
+          localField: '_id.chapa',
+          foreignField: '_id',
+          as: 'chapa'
+        }
+      },
+      {
+        $unwind: {
+          path: '$chapa',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          numero: {
+            $cond: [
+              { $eq: ['$_id.tipo', 'branco'] },
+              'BRANCO',
+              '$chapa.numero'
+            ]
+          },
+          nome: {
+            $cond: [
+              { $eq: ['$_id.tipo', 'branco'] },
+              'Votos em branco',
+              '$chapa.nome'
+            ]
+          },
+          total: 1
+        }
+      },
+      {
+        $sort: {
+          numero: 1
+        }
+      }
     ]);
-    return res.json(votos);
-  } catch { return res.status(500).json({ erro: 'Erro ao buscar os resultados.' }); }
-});
 
+    return res.json(votos);
+  } catch {
+    return res.status(500).json({
+      erro: 'Erro ao buscar os resultados.'
+    });
+  }
+});
 router.post('/cadastrar-matriculas', async (req, res) => {
   if (!adminAutorizado(req, res)) return;
   const lista = String(req.body.listaMatriculas || '').trim();

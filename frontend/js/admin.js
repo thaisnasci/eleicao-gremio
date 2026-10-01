@@ -17,9 +17,9 @@ function mostrarLogin() {
 }
 
 function verificarSessao() {
-    const autenticado = sessionStorage.getItem("adminAuth");
+    const token = sessionStorage.getItem("adminToken");
 
-    if (autenticado === "true") {
+    if (token) {
         mostrarPainel();
     } else {
         mostrarLogin();
@@ -39,7 +39,7 @@ formLogin.addEventListener("submit", async (event) => {
     mensagem.textContent = "Verificando...";
 
     try {
-        const resposta = await fetch(`${API_URL}/api/admin/validar`, {
+        const resposta = await fetch(`${API_URL}/api/admin/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -49,14 +49,16 @@ formLogin.addEventListener("submit", async (event) => {
             })
         });
 
+        const dados = await resposta.json();
+
         if (!resposta.ok) {
-            mensagem.textContent = "Senha incorreta.";
+            mensagem.textContent = dados.erro || "Senha incorreta.";
             senha.value = "";
             senha.focus();
             return;
         }
 
-        sessionStorage.setItem("adminAuth", "true");
+        sessionStorage.setItem("adminToken", dados.token);
 
         mensagem.textContent = "";
         mostrarPainel();
@@ -69,7 +71,7 @@ formLogin.addEventListener("submit", async (event) => {
 });
 
 sair.addEventListener("click", () => {
-    sessionStorage.removeItem("adminAuth");
+    sessionStorage.removeItem("adminToken");
     mostrarLogin();
 });
 
