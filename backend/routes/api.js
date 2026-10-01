@@ -77,6 +77,31 @@ router.post('/votos', async (req, res) => {
   } catch { return res.status(500).json({ erro: 'Não foi possível registrar o voto.' }); }
 });
 
+router.post('/alunos', async (req, res) => {
+  if (!adminAutorizado(req, res)) return;
+
+  try {
+    const alunos = await Aluno.find(
+      {},
+      {
+        _id: 0,
+        matricula: 1,
+        nome: 1,
+        jaVotou: 1
+      }
+    ).sort({ matricula: 1 });
+
+    return res.json(alunos);
+
+  } catch (erro) {
+    console.error(erro);
+
+    return res.status(500).json({
+      erro: 'Não foi possível carregar os estudantes.'
+    });
+  }
+});
+
 router.post('/resultados', async (req, res) => {
   if (!adminAutorizado(req, res)) return;
 
@@ -143,13 +168,77 @@ router.post('/resultados', async (req, res) => {
 });
 router.post('/cadastrar-matriculas', async (req, res) => {
   if (!adminAutorizado(req, res)) return;
-  const lista = String(req.body.listaMatriculas || '').trim();
-  if (!lista) return res.status(400).json({ erro: 'A lista de matrículas está vazia.' });
-  const matriculas = [...new Set(lista.split(/[\s,;]+/).map((item) => item.trim()).filter(Boolean))];
+
   try {
-    const resultado = await Aluno.bulkWrite(matriculas.map((matricula) => ({ updateOne: { filter: { matricula }, update: { $setOnInsert: { matricula, jaVotou: false } }, upsert: true } })));
-    return res.json({ sucesso: true, mensagem: `${resultado.upsertedCount} nova(s) matrícula(s) cadastrada(s).` });
-  } catch { return res.status(500).json({ erro: 'Erro ao cadastrar matrículas.' }); }
+    const listaAlunos = Array.isArray(req.body.alunos)
+      ? req.body.alunos
+      : [];
+
+    if (!listaAlunos.length) {
+      return res.status(400).json({
+        erro: 'Nenhum estudante informado.'
+      });
+    }
+
+    const alunosParaCadastrar = [];
+
+    for (const aluno of listaAlunos) {
+      const matricula = String(aluno.matricula || '').trim();
+      const nome = String(aluno.nome || '').trim();
+
+      if (!matricula || !nome) {
+        continue;
+      }
+
+      alunosParaCadastrar.push({
+        matricula,
+        nome,
+        jaVotou: false
+      });
+    }
+
+    if (!alunosParaCadastrar.length) {
+      return res.status(400).json({
+        erro: 'Informe matrícula e nome para os estudantes.'
+      });
+    }
+
+    let cadastrados = 0;
+    let existentes = 0;
+
+    for (const aluno of alunosParaCadastrar) {
+      const existente = await Aluno.findOne({
+        matricula: aluno.matricula
+      });
+
+      if (existente) {
+        existentes++;
+
+        // Se o aluno já existe, atualiza somente o nome.
+        // Não altera jaVotou.
+        existente.nome = aluno.nome;
+
+        await existente.save();
+      } else {
+        await Aluno.create(aluno);
+        cadastrados++;
+      }
+    }
+
+    return res.json({
+      sucesso: true,
+      mensagem:
+        `${cadastrados} estudante(s) cadastrado(s). ` +
+        `${existentes} estudante(s) já existiam e tiveram o nome atualizado.`
+    });
+
+  } catch (erro) {
+    console.error(erro);
+
+    return res.status(500).json({
+      erro: 'Não foi possível cadastrar os estudantes.'
+    });
+  }
 });
 
 router.post('/cadastrar-chapa', async (req, res) => {

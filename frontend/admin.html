@@ -1,45 +1,56 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Painel Administrativo</title>
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/admin.css" />
-  </head>
-  <body>
-    <main class="cartao entrada admin-painel">
-      <section id="login">
-        <h1>Painel Administrativo</h1>
-        <p>Informe a senha para acessar.</p>
-        <form id="formLogin">
-          <label for="senha">Senha do administrador</label
-          ><input
-            id="senha"
-            type="password"
-            required
-            autocomplete="current-password"
-          /><button class="botao continuar" type="submit">ENTRAR</button>
-        </form>
-        <p id="mensagem" class="mensagem" aria-live="polite"></p>
-      </section>
-      <section id="opcoes" class="escondido">
-        <h1>Painel Administrativo</h1>
-        <p>Gerencie a eleição estudantil.</p>
-        <nav class="cards-admin">
-          <a class="card-admin" href="cadastrar.html"
-            ><strong>ALUNOS</strong><span>Cadastrar eleitores</span></a
-          ><a class="card-admin" href="chapas.html"
-            ><strong>CHAPAS</strong
-            ><span>Cadastrar e visualizar chapas</span></a
-          ><a class="card-admin" href="resultados.html"
-            ><strong>RESULTADOS</strong><span>Visualizar apuração</span></a
-          >
-        </nav>
-        <button id="sair" class="botao corrige sair">SAIR</button>
-      </section>
-    </main>
-    <script src="js/config.js"></script>
-    <script src="js/admin.js"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Administrativo</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+
+<body>
+  <main class="cartao entrada admin-painel">
+    <section id="login">
+      <h1>Painel Administrativo</h1>
+      <p>Informe a senha para acessar.</p>
+      <form id="formLogin">
+        <label for="senha">Senha do administrador</label><input id="senha" type="password" required
+          autocomplete="current-password" /><button class="botao continuar" type="submit">ENTRAR</button>
+      </form>
+      <p id="mensagem" class="mensagem" aria-live="polite"></p>
+    </section>
+    <section id="opcoes" class="escondido">
+      <h1>Painel Administrativo</h1>
+      <p>Gerencie a eleição estudantil.</p>
+      <nav class="cards-admin">
+        <a class="card-admin" href="cadastrar.html">
+          <strong>CADASTRAR ALUNOS</strong>
+          <span>Cadastrar eleitores</span>
+        </a>
+
+        <a class="card-admin" href="alunos.html">
+          <strong>ESTUDANTES</strong>
+          <span>Ver estudantes e status de votação</span>
+        </a>
+
+        <a class="card-admin" href="chapas.html">
+          <strong>CHAPAS</strong>
+          <span>Cadastrar e visualizar chapas</span>
+        </a>
+
+        <a class="card-admin" href="resultados.html">
+          <strong>RESULTADOS</strong>
+          <span>Visualizar apuração</span>
+        </a>
+      </nav>
+
+      </nav>
+      <button id="sair" class="botao corrige sair">SAIR</button>
+    </section>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+
 </html>

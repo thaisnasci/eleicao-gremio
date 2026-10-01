@@ -40,3 +40,183 @@
 .item-chapa small{
     color:#555
 }
+/* ================================
+   LISTA DE ESTUDANTES
+================================ */
+
+.resumo-alunos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.resumo-item {
+  border: 1px solid #d5d5d5;
+  border-radius: 10px;
+  padding: 16px 10px;
+  text-align: center;
+  background: #f8f8f8;
+}
+
+.resumo-item strong {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.resumo-item span {
+  font-size: 14px;
+}
+
+.aluno-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+
+  padding: 14px;
+  margin-top: 10px;
+
+  border: 1px solid #d5d5d5;
+  border-radius: 10px;
+
+  background: #fff;
+}
+
+.dados-aluno {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  text-align: left;
+}
+
+.dados-aluno strong {
+  font-size: 16px;
+}
+
+.dados-aluno span {
+  color: #555;
+  font-size: 14px;
+}
+
+.status-aluno {
+  padding: 6px 10px;
+  border-radius: 20px;
+
+  font-size: 13px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.status-votou {
+  background: #d9f2df;
+  color: #18732a;
+}
+
+.status-nao-votou {
+  background: #fff0cc;
+  color: #8a5a00;
+}
+
+@media (max-width: 600px) {
+  .resumo-alunos {
+    grid-template-columns: 1fr;
+  }
+
+  .aluno-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+/* ================================
+   LISTA DE ESTUDANTES
+================================ */
+
+.resumo-alunos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.resumo-item {
+  border: 1px solid #d5d5d5;
+  border-radius: 10px;
+  padding: 16px 10px;
+  text-align: center;
+  background: #f8f8f8;
+}
+
+.resumo-item strong {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.resumo-item span {
+  font-size: 14px;
+}
+
+.aluno-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+
+  padding: 14px;
+  margin-top: 10px;
+
+  border: 1px solid #d5d5d5;
+  border-radius: 10px;
+
+  background: #fff;
+}
+
+.dados-aluno {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.dados-aluno strong {
+  font-size: 16px;
+}
+
+.dados-aluno span {
+  color: #555;
+  font-size: 14px;
+}
+
+.status-aluno {
+  padding: 6px 10px;
+  border-radius: 20px;
+
+  font-size: 13px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.status-votou {
+  background: #d9f2df;
+  color: #18732a;
+}
+
+.status-nao-votou {
+  background: #fff0cc;
+  color: #8a5a00;
+}
+
+@media (max-width: 600px) {
+
+  .resumo-alunos {
+    grid-template-columns: 1fr;
+  }
+
+  .aluno-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

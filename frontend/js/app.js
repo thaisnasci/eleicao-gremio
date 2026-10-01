@@ -85,21 +85,36 @@ function confirmarPreparacao() {
 async function enviarVoto() {
   try {
     const resposta = await fetch(`${API_URL}/api/votos`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          matricula,
-          numeroChapa: numero,
-          tipo: votoBranco ? "branco" : "chapa",
-        }),
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        matricula,
+        numeroChapa: numero,
+        tipo: votoBranco ? "branco" : "chapa",
       }),
-      dados = await resposta.json();
-    if (!resposta.ok) throw new Error(dados.erro);
+    });
+
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(dados.erro);
+    }
+
     tela.innerHTML =
-      '<div class="sucesso"><h2>VOTO CONFIRMADO!</h2><p>Obrigado por participar da eleição.</p></div>';
+      '<div class="sucesso"><h2>VOTO CONFIRMADO!</h2><p>Obrigado por participar da eleição.</p><p>Aguarde o próximo estudante.</p></div>';
+
     document.querySelector(".painel").classList.add("escondido");
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+
   } catch (erro) {
-    tela.innerHTML = `<p><strong>Não foi possível confirmar:</strong></p><p>${erro.message}</p>`;
+    tela.innerHTML = `
+      <p><strong>Não foi possível confirmar:</strong></p>
+      <p>${erro.message}</p>
+    `;
+
     setTimeout(atualizarTela, 2500);
   }
 }

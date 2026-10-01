@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>Estudantes - Grêmio</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+
+  <body>
+    <main class="cartao entrada">
+
+      <h1>Estudantes Cadastrados</h1>
+
+      <p>
+        Consulte os estudantes cadastrados e acompanhe
+        apenas o status da votação.
+      </p>
+
+      <div class="resumo-alunos">
+
+        <div class="resumo-item">
+          <strong id="totalAlunos">0</strong>
+          <span>Total</span>
+        </div>
+
+        <div class="resumo-item">
+          <strong id="totalVotaram">0</strong>
+          <span>Votaram</span>
+        </div>
+
+        <div class="resumo-item">
+          <strong id="totalNaoVotaram">0</strong>
+          <span>Não votaram</span>
+        </div>
+
+      </div>
+
+      <button
+        id="atualizar"
+        class="botao continuar"
+        type="button"
+      >
+        ATUALIZAR LISTA
+      </button>
+
+      <p
+        id="mensagem"
+        class="mensagem"
+        aria-live="polite"
+      ></p>
+
+      <div id="listaAlunos">
+        <p>Carregando estudantes...</p>
+      </div>
+
+      <p>
+        <a href="admin.html">Voltar ao painel</a>
+      </p>
+
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/alunos.js"></script>
+  </body>
+</html>

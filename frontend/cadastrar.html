@@ -3,33 +3,59 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cadastro de Eleitores</title>
+
+    <title>Cadastro de Estudantes</title>
+
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/admin.css" />
   </head>
 
   <body>
     <main class="cartao entrada">
-      <h1>Painel do Administrador</h1>
+      <h1>Cadastro de Estudantes</h1>
 
-      <p>Cadastre as matrículas autorizadas a votar.</p>
+      <p>
+        Cadastre as matrículas e os nomes dos estudantes autorizados a votar.
+      </p>
 
       <form id="formCadastro">
-        <label for="listaMatriculas">Matrículas</label>
+        <label for="listaAlunos">
+          Estudantes
+        </label>
 
         <textarea
-          id="listaMatriculas"
-          rows="6"
+          id="listaAlunos"
+          rows="10"
           required
-          placeholder="202601, 202602, 202603"
-          style="width: 100%; padding: 12px; font: inherit"
+          placeholder="2026001, João Silva
+2026002, Maria Santos
+2026003, Pedro Oliveira"
+          style="
+            width: 100%;
+            padding: 12px;
+            font: inherit;
+            resize: vertical;
+          "
         ></textarea>
 
-        <button type="submit" class="botao continuar">
-          CADASTRAR ALUNOS
+        <p style="font-size: 14px; color: #666; text-align: left;">
+          Coloque um estudante por linha no formato:
+          <strong>Matrícula, Nome</strong>
+        </p>
+
+        <button
+          type="submit"
+          class="botao continuar"
+        >
+          CADASTRAR ESTUDANTES
         </button>
       </form>
 
-      <p id="mensagem" class="mensagem" aria-live="polite"></p>
+      <p
+        id="mensagem"
+        class="mensagem"
+        aria-live="polite"
+      ></p>
 
       <p>
         <a href="admin.html">Voltar ao painel</a>
