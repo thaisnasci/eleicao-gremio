@@ -215,16 +215,11 @@ router.get('/chapas', async (req, res) => {
   }
 });
 
-
 /* =========================================================
    REGISTRAR VOTO
 ========================================================= */
 
 router.post('/votos', async (req, res) => {
-  const matricula = String(
-    req.body.matricula || ''
-  ).trim();
-
   const votoBranco =
     req.body.tipo === 'branco';
 
@@ -233,15 +228,16 @@ router.post('/votos', async (req, res) => {
   ).trim();
 
   if (
-    !matricula ||
-    (!votoBranco && !numeroChapa)
+    !votoBranco &&
+    !numeroChapa
   ) {
     return res.status(400).json({
-      erro: 'Matrícula e opção de voto são obrigatórias.'
+      erro: 'Escolha uma chapa ou vote em branco.'
     });
   }
 
   try {
+
     const chapa = votoBranco
       ? null
       : await Chapa.findOne({
@@ -254,97 +250,15 @@ router.post('/votos', async (req, res) => {
       });
     }
 
-    const agora = new Date();
+    await Voto.create({
+      chapa: chapa
+        ? chapa._id
+        : null,
 
-    /*
-      O voto só pode ser registrado se:
-
-      - a matrícula ainda não votou
-      - ela está reservada
-      - a reserva ainda não expirou
-
-      O findOneAndUpdate é atômico.
-      Portanto, duas urnas não conseguem registrar
-      o mesmo aluno ao mesmo tempo.
-    */
-
-    const aluno = await Aluno.findOneAndUpdate(
-      {
-        matricula,
-        jaVotou: false,
-        emVotacao: true,
-        reservaAte: {
-          $gt: agora
-        }
-      },
-      {
-        $set: {
-          jaVotou: true,
-          emVotacao: false,
-          reservaAte: null
-        }
-      },
-      {
-        new: true
-      }
-    );
-
-    if (!aluno) {
-      const alunoExistente = await Aluno.findOne({
-        matricula
-      }).select('jaVotou emVotacao reservaAte');
-
-      if (!alunoExistente) {
-        return res.status(403).json({
-          erro: 'Matrícula inválida.'
-        });
-      }
-
-      if (alunoExistente.jaVotou) {
-        return res.status(403).json({
-          erro: 'Esta matrícula já registrou um voto.'
-        });
-      }
-
-      return res.status(403).json({
-        erro: 'A sessão desta urna expirou. Digite a matrícula novamente.'
-      });
-    }
-
-    try {
-      await Voto.create({
-        chapa: chapa
-          ? chapa._id
-          : null,
-
-        tipo: votoBranco
-          ? 'branco'
-          : 'chapa'
-      });
-
-    } catch (error) {
-
-      /*
-        Se houver erro ao salvar o voto,
-        devolvemos o aluno para o estado anterior.
-      */
-
-      await Aluno.updateOne(
-        {
-          _id: aluno._id,
-          jaVotou: true
-        },
-        {
-          $set: {
-            jaVotou: false,
-            emVotacao: false,
-            reservaAte: null
-          }
-        }
-      );
-
-      throw error;
-    }
+      tipo: votoBranco
+        ? 'branco'
+        : 'chapa'
+    });
 
     return res.status(201).json({
       sucesso: true,
@@ -352,6 +266,7 @@ router.post('/votos', async (req, res) => {
     });
 
   } catch (erro) {
+
     console.error(erro);
 
     return res.status(500).json({
@@ -359,6 +274,7 @@ router.post('/votos', async (req, res) => {
     });
   }
 });
+
 
 
 /* =========================================================

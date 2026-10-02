@@ -1,14 +1,46 @@
-let matricula = "",
-  chapas = [],
-  numero = "",
-  votoBranco = false;
+let chapas = [];
+let numero = "";
+let votoBranco = false;
 
-const tela = document.getElementById("conteudoTela"),
-  teclado = document.getElementById("teclado");
+const tela = document.getElementById("conteudoTela");
+const teclado = document.getElementById("teclado");
 
 
 /* =========================================================
-   TECLADO
+   CARREGAR CHAPAS
+========================================================= */
+
+async function carregarChapas() {
+  try {
+    const resposta = await fetch(`${API_URL}/api/chapas`);
+
+    if (!resposta.ok) {
+      throw new Error("Não foi possível carregar as chapas.");
+    }
+
+    chapas = await resposta.json();
+
+    numero = "";
+    votoBranco = false;
+
+    atualizarTela();
+
+  } catch (erro) {
+    tela.innerHTML = `
+      <p>
+        <strong>Erro ao carregar a eleição.</strong>
+      </p>
+
+      <p>
+        ${erro.message}
+      </p>
+    `;
+  }
+}
+
+
+/* =========================================================
+   TECLADO NUMÉRICO
 ========================================================= */
 
 for (let n = 1; n <= 9; n += 1) {
@@ -25,129 +57,22 @@ teclado.insertAdjacentHTML(
 
 
 /* =========================================================
-   VALIDAR MATRÍCULA
+   CLIQUE NO TECLADO
 ========================================================= */
 
-document
-  .getElementById("formMatricula")
-  .addEventListener("submit", async (event) => {
+teclado.addEventListener("click", (event) => {
 
-    event.preventDefault();
+  const tecla = event.target.dataset.numero;
 
-    const campo =
-      document.getElementById("matricula");
+  if (tecla && numero.length < 4) {
 
-    const mensagem =
-      document.getElementById("mensagemMatricula");
+    numero += tecla;
 
-    matricula = campo.value.trim();
+    votoBranco = false;
 
-    mensagem.textContent = "";
-
-    if (!matricula) {
-      mensagem.textContent =
-        "Informe a matrícula.";
-
-      return;
-    }
-
-    try {
-
-      /*
-        Agora esta única requisição:
-
-        - valida a matrícula
-        - reserva a urna
-        - carrega as chapas
-      */
-
-      const resposta = await fetch(
-        `${API_URL}/api/alunos/validar`,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify({
-            matricula
-          })
-        }
-      );
-
-      const dados = await resposta.json();
-
-      if (!resposta.ok) {
-        throw new Error(
-          dados.erro ||
-          "Não foi possível validar a matrícula."
-        );
-      }
-
-      /*
-        As chapas agora vêm junto da validação.
-      */
-
-      chapas = dados.chapas || [];
-
-      /*
-        Limpa qualquer estado anterior.
-      */
-
-      numero = "";
-      votoBranco = false;
-
-      /*
-        Esconde a tela de matrícula
-        e abre a urna.
-      */
-
-      document
-        .getElementById("telaMatricula")
-        .classList
-        .add("escondido");
-
-      document
-        .getElementById("urna")
-        .classList
-        .remove("escondido");
-
-      atualizarTela();
-
-    } catch (erro) {
-
-      mensagem.textContent =
-        erro.message ||
-        "Erro ao conectar ao servidor.";
-    }
-  });
-
-
-/* =========================================================
-   TECLADO NUMÉRICO
-========================================================= */
-
-teclado.addEventListener(
-  "click",
-  (event) => {
-
-    const tecla =
-      event.target.dataset.numero;
-
-    if (
-      tecla &&
-      numero.length < 4
-    ) {
-
-      numero += tecla;
-
-      votoBranco = false;
-
-      atualizarTela();
-    }
+    atualizarTela();
   }
-);
+});
 
 
 /* =========================================================
@@ -156,17 +81,13 @@ teclado.addEventListener(
 
 document
   .getElementById("corrige")
-  .addEventListener(
-    "click",
-    () => {
+  .addEventListener("click", () => {
 
-      numero = "";
+    numero = "";
+    votoBranco = false;
 
-      votoBranco = false;
-
-      atualizarTela();
-    }
-  );
+    atualizarTela();
+  });
 
 
 /* =========================================================
@@ -175,17 +96,13 @@ document
 
 document
   .getElementById("branco")
-  .addEventListener(
-    "click",
-    () => {
+  .addEventListener("click", () => {
 
-      numero = "";
+    numero = "";
+    votoBranco = true;
 
-      votoBranco = true;
-
-      atualizarTela();
-    }
-  );
+    atualizarTela();
+  });
 
 
 /* =========================================================
@@ -201,16 +118,14 @@ document
 
 
 /* =========================================================
-   ATUALIZAR TELA DA URNA
+   ATUALIZAR TELA
 ========================================================= */
 
 function atualizarTela() {
 
-  const chapa =
-    chapas.find(
-      (item) =>
-        item.numero === numero
-    );
+  const chapa = chapas.find(
+    (item) => item.numero === numero
+  );
 
   const detalhe =
     votoBranco
@@ -275,16 +190,11 @@ function atualizarTela() {
 
 function confirmarPreparacao() {
 
-  const chapa =
-    chapas.find(
-      (item) =>
-        item.numero === numero
-    );
+  const chapa = chapas.find(
+    (item) => item.numero === numero
+  );
 
-  if (
-    !votoBranco &&
-    !chapa
-  ) {
+  if (!votoBranco && !chapa) {
 
     atualizarTela();
 
@@ -354,31 +264,29 @@ async function enviarVoto() {
 
   try {
 
-    const resposta =
-      await fetch(
-        `${API_URL}/api/votos`,
-        {
-          method: "POST",
+    const resposta = await fetch(
+      `${API_URL}/api/votos`,
+      {
+        method: "POST",
 
-          headers: {
-            "Content-Type": "application/json"
-          },
+        headers: {
+          "Content-Type": "application/json"
+        },
 
-          body: JSON.stringify({
-            matricula,
+        body: JSON.stringify({
 
-            numeroChapa: numero,
+          numeroChapa: numero,
 
-            tipo:
-              votoBranco
-                ? "branco"
-                : "chapa"
-          })
-        }
-      );
+          tipo:
+            votoBranco
+              ? "branco"
+              : "chapa"
 
-    const dados =
-      await resposta.json();
+        })
+      }
+    );
+
+    const dados = await resposta.json();
 
     if (!resposta.ok) {
       throw new Error(
@@ -410,11 +318,6 @@ async function enviarVoto() {
       .classList
       .add("escondido");
 
-    /*
-      Depois de 2 segundos,
-      a urna volta para a tela inicial.
-    */
-
     setTimeout(() => {
       window.location.reload();
     }, 2000);
@@ -433,14 +336,15 @@ async function enviarVoto() {
       </p>
     `;
 
-    /*
-      Se a reserva expirou,
-      voltamos para a tela inicial
-      para o aluno informar a matrícula novamente.
-    */
-
     setTimeout(() => {
       window.location.reload();
     }, 2500);
   }
 }
+
+
+/* =========================================================
+   INICIAR URNA
+========================================================= */
+
+carregarChapas();
